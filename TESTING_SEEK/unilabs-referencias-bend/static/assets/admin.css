@@ -1,0 +1,315 @@
+body {
+    background: #fff;
+}
+form .aligned ul li{
+    color: red !important;
+}
+#header {
+    background: #DE3C20;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    color: #fff;
+}
+h1 {
+    color: #242424;
+    font-size: 18px;
+    font-weight: bold;
+}
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+    color: #fff;
+}
+
+a:link:hover,
+a:visited:hover {
+    color: #d1351a !important;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #242424 !important;
+    font-weight: bold !important;
+}
+body.dashboard #content-main .module,
+body.change-form .module {
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, .15);*/
+    border-radius: 5px;
+}
+.content {
+    background-color: #fff !important;
+}
+#content-main .module td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+#content-main .module th {
+    padding: 4px 0;
+    vertical-align: middle;
+}
+
+body.dashboard #content-main .module th {
+    padding: 12px;
+}
+
+.module h2,
+.module caption,
+.inline-group h2,
+#changelist-filter h2 {
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 12px !important;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+a.section:link, a.section:visited {
+    color: #DE3C20 !important;
+    font-weight: bold !important;
+}
+
+div.breadcrumbs {
+    background: #d1351a;
+}
+
+div.breadcrumbs a,
+div.breadcrumbs a:hover {
+    color: #fff !important;
+}
+
+#user-tools a:focus,
+#user-tools a:hover {
+    color: #424b5a;
+    border-color: #424b5a;
+}
+
+.object-tools a:link,
+.object-tools a:visited {
+    background-color: #DE3C20;
+    color: #fff !important;
+    transition: .25s;
+}
+
+.object-tools a:focus,
+.object-tools a:hover {
+    background-color: #d1351a;
+    color: #fff !important;
+    transition: .25s;
+}
+
+#changelist-filter li.selected {
+    border-left-color: #DE3C20 !important;
+}
+
+#changelist-filter li.selected a {
+    color: #424b5a !important;
+}
+
+#changelist .actions {
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, .1);*/
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    padding: 16px 10px !important;
+}
+
+#changelist-form .results,
+#changelist-filter {
+    background-color: #fff !important;
+}
+#nav-sidebar {
+    background-color: #f1f1f1;
+}
+#nav-sidebar .current-model {
+    background-color: #fff5e0 !important;
+    border: none !important;
+}
+#changelist .paginator {
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, .1);*/
+    border-radius: 0 0 5px 5px;
+    padding: 16px 10px;
+    background-color: #fff !important;
+    color: #242424 !important;
+    border: none !important;
+    border-bottom: none !important;
+}
+
+#content-related {
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, .1);*/
+    border-radius: 5px;
+}
+
+#changelist #toolbar {
+    border: none !important;
+    background: transparent !important;
+}
+
+#changelist #toolbar form #searchbar,
+#changelist #toolbar form input[type="submit"],
+#changelist .actions .button {
+    border-radius: 30px !important;
+}
+
+body.change-list .module {
+    background: transparent;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
+
+.form-row input,
+.form-row textarea {
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.form-row select {
+    border-radius: 5px;
+    height: 30px;
+}
+
+.paginator a {
+    border: 1px solid #424b5a !important;
+    background: none !important;
+    transition: .25s;
+}
+
+.paginator a:hover {
+    background: #DE3C20 !important;
+    transition: .25s;
+}
+
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button {
+    color: #fff !important;
+    background: #DE3C20 !important;
+    transition: .25s;
+    border: none !important;
+    min-width: 40px;
+}
+.submit-row {
+    background-color: #fff !important;
+    border: none !important;
+}
+
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+a.button:hover {
+    background: #DE3C20 !important;
+    transition: .25s;
+}
+
+@media (max-width: 767px) {
+    .aligned .form-row,
+    .aligned .form-row > div {
+        width: calc(100vw - 40px);
+        padding: 8px 5px;
+    }
+
+    .aligned .form-row textarea {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .form-row .datetime input.vDateField,
+    .form-row .datetime input.vTimeField {
+        width: 60% !important;
+    }
+}
+
+.selector .selector-filter {
+    display: flex;
+}
+
+.inline-group .tabular td.original p {
+    display: none !important;
+}
+
+a:link,
+a:visited {
+    color: #151E29 !important;
+    font-weight: 400 !important;
+    transition: .3s;
+}
+
+#header a:link,
+#header a:visited {
+    color: #fff !important;
+    transition: .3s;
+}
+
+#header a:link:hover,
+#header a:visited:hover {
+    color: #fff !important;
+}
+
+a.deletelink:link,
+a.deletelink:visited {
+    color: #fff !important;
+}
+
+tr:nth-child(odd), tr:nth-child(even) {
+    background-color: #f1f1f1 !important;
+}
+.module {
+    background-color: #ffffff !important;
+    color: #242424 !important;
+}
+#changelist .actions {
+    background-color: #ffffff !important;
+    color: #242424 !important;
+}
+tr:nth-child(odd) {
+    background-color: #ffffff !important;
+    color: #242424 !important;
+}
+input {
+    background-color: #ecebeb !important;
+    border: none !important;
+    color: #242424 !important;
+}
+select {
+    background-color: #ecebeb !important;
+    border: none !important;
+    color: #242424 !important;
+}
+label {
+    color: #242424 !important;
+}
+.datetime {
+    color: #242424 !important;
+}
+thead th {
+    background-color: #dedede !important;
+}
+thead th .text a {
+    font-weight: bold !important;
+}
+thead th .text a:hover {
+    background-color: #dedede !important;
+    font-weight: bold !important;
+}
+thead th.required {
+    color: #242424 !important;
+}
+.inline-group div.add-row, .inline-group .tabular tr.add-row td {
+    background-color: #FFFFFF !important;
+}
+.help {
+    color: #242424 !important;
+}
+p {
+    color: #242424 !important;
+}
+thead th, tfoot td {
+    color: #242424 !important;
+}
+form .aligned ul li {
+    padding: 0px !important;
+    margin: 0px !important;
+}

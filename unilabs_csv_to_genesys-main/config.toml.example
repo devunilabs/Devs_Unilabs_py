@@ -1,0 +1,27 @@
+db_identifiers = ['PE001', 'PE002']
+execute_procedures = false  # true|false
+logger = 'development'  # Check loggers on file logging_config.yaml
+
+[db.'PE001']
+dsn = 'sqlserver-unilabs-pe001'
+user = 'sa'
+pass = 'Your_Password123'
+
+[db.'PE007']
+dsn = 'sqlserver-unilabs-pe007'
+user = 'sa'
+pass = 'Your_Password123'
+
+[folder]
+source = '/Users/user/workspace/unilabs_csv_to_genesys/data/source'
+observed = 'data/observed'
+succeded = 'data/succeded'
+
+[email]
+enable = true # true|false
+port = 587  # For starttls
+smtp_server = "smtp.gmail.com"
+sender_email = "sender_email@gmail.com"
+receiver_email = "receiver_email@gmail.com"
+password = "password"
+

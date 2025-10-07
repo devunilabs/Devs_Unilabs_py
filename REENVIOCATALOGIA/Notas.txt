@@ -1,0 +1,38 @@
+AutoEnvioOneDrive/
+
+├── app.py             # Servidor Flask que gestiona la lógica principal
+├── envio.py           # Función que maneja el envío de archivos
+├── config.py          # Configuración editable (rutas, intervalo, etc.)
+├── log.txt            # Registro de eventos (fecha, hora, estado)
+└── README.md          # Documentación y comentarios del flujo
+
+
+
+REENVIOEXCELV2/
+│
+├── backend/
+│   ├── app.py                # Servidor Flask que gestiona la lógica principal
+│   ├── envio.py              # Función que maneja el envío de archivos
+│   ├── config.py             # Configuración editable (rutas, intervalo, etc.)
+│   ├── watcher.py            # Script que vigila cambios en la carpeta origen (Linux o Windows)
+│   └── log.txt               # Registro de eventos (fecha, hora, estado)
+│
+├── frontend/
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── styles.css    # Estilos CSS
+│   │   └── js/
+│   │       └── script.js     # Comportamiento de la UI
+│   └── templates/
+│       └── index.html        # Plantilla HTML principal con interfaz de usuario
+│
+└── README.md                # Documentación técnica y comentarios
+
+🧠 Lógica:
+app.py: ejecuta la lógica cuando es llamado desde Power Automate o manualmente.
+
+envio.py: copia o mueve el archivo desde la carpeta de origen a la de destino (con validaciones).
+
+config.py: contiene las rutas configurables (CARPETA_ORIGEN, CARPETA_DESTINO) y el intervalo.
+
+log.txt: se registra algo como:

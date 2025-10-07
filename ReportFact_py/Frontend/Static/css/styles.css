@@ -1,0 +1,111 @@
+/* Estilo general de tarjetas */
+.card {
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border: none;
+}
+
+/* Barra de progreso general */
+.progress {
+    height: 22px;
+    border-radius: 12px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Botón principal */
+.btn-primary {
+    background: linear-gradient(45deg, #4e73df, #3b5ccc);
+    border: none;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: background 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #3b5ccc, #2f4eb4);
+}
+
+/* Botón secundario */
+.btn-outline-primary {
+    border: 2px solid #4e73df;
+    color: #4e73df;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4e73df;
+    color: white;
+}
+
+/* Tarjetas de estado por archivo */
+.status-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.status-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Input de archivos */
+.file-input-label {
+    display: block;
+    padding: 25px 15px;
+    border: 2px dashed #cfd8e3;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.file-input-label:hover {
+    border-color: #4e73df;
+    background-color: #f1f4fb;
+}
+
+/* Conteo de archivos */
+#fileCount {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Texto truncado por largo */
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    display: inline-block;
+}
+
+/* Responsive diseño */
+@media (max-width: 768px) {
+    .file-input-label {
+        padding: 20px 10px;
+    }
+
+    .btn-primary, .btn-outline-primary {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+    }
+
+    .progress {
+        height: 20px;
+    }
+}

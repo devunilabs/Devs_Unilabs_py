@@ -1,0 +1,72 @@
+﻿# REENVIOCATALOG - Dependencias para Agente IA
+# requirements_agent.txt - VERSIÓN CORREGIDA
+
+# LangChain moderno - CRÍTICO
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-openai>=0.0.5
+langchain-core>=0.1.0
+
+# LLMs opcionales
+openai>=1.0.0  # Para ChatOpenAI
+ollama>=0.1.0  # Para Ollama local (opcional)
+
+# Procesamiento de archivos Excel/CSV - ESENCIAL
+pandas>=1.5.0
+openpyxl>=3.1.0
+xlrd>=2.0.0
+
+# Monitoreo de archivos - CRÍTICO
+watchdog>=3.0.0
+
+# Automatización web - ESENCIAL  
+selenium>=4.15.0
+
+# HTTP requests para Flask
+requests>=2.31.0
+
+# Validación de datos con Pydantic
+pydantic>=2.0.0
+
+# Flask para backend (si no lo tienes)
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# Utilidades adicionales
+python-dateutil>=2.8.0
+pytz>=2023.3
+pathlib2>=2.3.7; python_version<"3.4"
+
+# Dependencias del sistema
+psutil>=5.9.0  # Para monitoreo de procesos
+
+# Logging y debugging
+colorama>=0.4.6
+python-dotenv>=1.0.0
+
+# Opcional: Para mejor manejo de errores
+tenacity>=8.2.0
+
+# Opcional: Para análisis más avanzados
+numpy>=1.24.0
+matplotlib>=3.7.0  # Para gráficos si necesitas
+
+# Testing (opcional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Herramientas de desarrollo (opcional)
+black>=23.0.0  # Formateo de código
+flake8>=6.0.0  # Linting
+mypy>=1.5.0   # Type checking
+
+# NOTA IMPORTANTE:
+# Si tienes problemas con versiones, usa estas versiones específicas:
+# langchain==0.1.4
+# langchain-community==0.0.21  
+# langchain-openai==0.0.6
+# pydantic==2.5.3
+# pandas==1.5.3
+# openpyxl==3.1.2
+# selenium==4.16.0
+# watchdog==3.0.0

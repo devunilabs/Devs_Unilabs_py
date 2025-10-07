@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitor de Sesiones</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .form-filtros { margin-bottom: 20px; }
+        .resumen { margin-top: 20px; }
+        .resumen span { margin-right: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Monitor de Pagina de referencias UNIREF</h1>
+
+    <form class="form-filtros" method="get" action="/">
+        <label>Fecha inicio:
+            <input type="date" name="start_date" value="{{ start_date }}">
+        </label>
+        <label>Fecha fin:
+            <input type="date" name="end_date" value="{{ end_date }}">
+        </label>
+        <label>Búsqueda:
+            <input type="text" name="search_term" value="{{ search_term }}" placeholder="Usuario o correo">
+        </label>
+        <label>Estado:
+            <select name="estado">
+                <option value="" {% if estado_filter == "" %}selected{% endif %}>Todos</option>
+                <option value="Activa" {% if estado_filter == "Activa" %}selected{% endif %}>Activa</option>
+                <option value="Inactiva" {% if estado_filter == "Inactiva" %}selected{% endif %}>Inactiva</option>
+            </select>
+        </label>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    {% if data %}
+    <form method="post" action="/terminate">
+        <input type="hidden" name="start_date" value="{{ start_date }}">
+        <input type="hidden" name="end_date" value="{{ end_date }}">
+        <input type="hidden" name="search_term" value="{{ search_term }}">
+        <input type="hidden" name="estado" value="{{ estado_filter }}">
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for col in columns %}
+                        <th>{{ col.replace('_', ' ').capitalize() }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td><input type="checkbox" name="session_ids" value="{{ row.session_id }}"></td>
+                    {% for col in columns %}
+                        <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit">Terminar sesiones seleccionadas</button>
+    </form>
+
+    <div class="resumen">
+        <span>Total Activas: {{ total_activas }}</span>
+        <span>Total Inactivas: {{ total_inactivas }}</span>
+    </div>
+    {% else %}
+        <p>No hay datos disponibles con los filtros seleccionados.</p>
+    {% endif %}
+</body>
+</html>

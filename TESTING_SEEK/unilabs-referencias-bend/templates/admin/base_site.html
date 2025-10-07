@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Unilabs - backoffice') }}{% endblock %}
+
+{% block extrastyle %}
+<link rel="shortcut icon" type="image/png" href="{% static 'assets/logo.svg' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'assets/logo.svg' %}" alt="{{ site_header|default:_('Unilabs') }}" height="75">
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

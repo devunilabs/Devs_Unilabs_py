@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas SQL Activas</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #0277bd;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #e0f7fa;
+        }
+        .volver {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #00796b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .volver:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <h2>Consultas SQL Activas (pg_stat_activity)</h2>
+
+    {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay consultas activas en este momento.</p>
+    {% endif %}
+
+    <a class="volver" href="{{ url_for('index') }}">← Volver a sesiones</a>
+</body>
+</html>

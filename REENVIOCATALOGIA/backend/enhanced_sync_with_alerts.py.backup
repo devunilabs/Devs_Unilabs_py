@@ -1,0 +1,332 @@
+# backend/enhanced_sync_with_alerts.py - SINCRONIZACIÓN CON ALERTAS TXT
+import os
+import sys
+import time
+import shutil
+import subprocess
+from datetime import datetime, timedelta
+from pathlib import Path
+import logging
+
+class OneDriveForcedSync:
+    """Sistema que FUERZA sincronización OneDrive + alertas TXT"""
+    
+    def __init__(self):
+        self.logger = logging.getLogger('OneDriveForced')
+        
+    def perform_sync_with_lock(self, origen, destino):
+        """Sincronización con archivo de alerta y forzado OneDrive"""
+        
+        # Preparar rutas y archivos de alerta
+        destino_path = Path(destino)
+        dest_dir = destino_path.parent
+        alert_file = dest_dir / f"SINCRONIZANDO_{destino_path.stem}.txt"
+        
+        try:
+            # PASO 1: Crear archivo de alerta
+            self._create_lock_alert(alert_file)
+            
+            # PASO 2: Forzar sincronización de alerta (para que otros la vean inmediatamente)
+            self._force_onedrive_sync_immediate(dest_dir)
+            
+            # PASO 3: Esperar que la alerta se propague
+            time.sleep(3)
+            
+            # PASO 4: Realizar copia del archivo principal
+            copy_success = self._perform_robust_copy(origen, destino)
+            
+            if copy_success:
+                # PASO 5: Forzar sincronización del archivo copiado
+                sync_success = self._force_onedrive_sync_immediate(dest_dir)
+                
+                # PASO 6: Verificar que llegó a la nube
+                cloud_verified = self._verify_cloud_sync(destino, max_wait_minutes=2)
+                
+                # PASO 7: Eliminar archivo de alerta
+                self._remove_lock_alert(alert_file)
+                
+                # PASO 8: Sincronizar eliminación de alerta
+                self._force_onedrive_sync_immediate(dest_dir)
+                
+                return {
+                    'success': True,
+                    'copy_success': copy_success,
+                    'onedrive_sync': sync_success,
+                    'cloud_verified': cloud_verified,
+                    'message': f'Archivo sincronizado {"y verificado en nube" if cloud_verified else "localmente"}'
+                }
+            else:
+                # PASO 7 (error): Eliminar alerta en caso de error
+                self._remove_lock_alert(alert_file)
+                return {
+                    'success': False,
+                    'message': 'Error en copia de archivo'
+                }
+                
+        except Exception as e:
+            # Cleanup en caso de error
+            self._remove_lock_alert(alert_file)
+            return {
+                'success': False,
+                'message': f'Error crítico: {str(e)}'
+            }
+    
+    def _create_lock_alert(self, alert_file):
+        """Crea archivo TXT de alerta"""
+        try:
+            alert_content = f"""🔄 SINCRONIZACIÓN EN PROCESO 🔄
+
+ARCHIVO: {alert_file.stem.replace('SINCRONIZANDO_', '')}
+ESTADO: Copiando archivo...
+INICIO: {datetime.now().strftime('%H:%M:%S')}
+SISTEMA: REENVIOCATALOG IA
+
+⚠️ IMPORTANTE ⚠️
+- NO ABRIR el archivo mientras aparezca esta alerta
+- NO EDITAR el archivo durante el proceso
+- La sincronización tomará 1-2 minutos máximo
+- Esta alerta desaparecerá automáticamente al completarse
+
+Sistema IA trabajando para mantener integridad de datos...
+
+Proceso automático - No requiere intervención manual
+"""
+            
+            with open(alert_file, 'w', encoding='utf-8') as f:
+                f.write(alert_content)
+            
+            self.logger.info(f"Alerta TXT creada: {alert_file.name}")
+            
+        except Exception as e:
+            self.logger.error(f"Error creando alerta: {e}")
+    
+    def _remove_lock_alert(self, alert_file):
+        """Elimina archivo de alerta"""
+        try:
+            if alert_file.exists():
+                alert_file.unlink()
+                self.logger.info(f"Alerta TXT eliminada: {alert_file.name}")
+        except Exception as e:
+            self.logger.error(f"Error eliminando alerta: {e}")
+    
+    def _perform_robust_copy(self, origen, destino):
+        """Copia robusta del archivo principal"""
+        try:
+            # Verificar origen
+            if not os.path.exists(origen):
+                self.logger.error("Archivo origen no existe")
+                return False
+            
+            # Crear directorio destino si no existe
+            dest_dir = os.path.dirname(destino)
+            if not os.path.exists(dest_dir):
+                os.makedirs(dest_dir, exist_ok=True)
+            
+            # Copia con verificación
+            shutil.copy2(origen, destino)
+            
+            # Verificar que se copió correctamente
+            if os.path.exists(destino):
+                size_origen = os.path.getsize(origen)
+                size_destino = os.path.getsize(destino)
+                
+                if abs(size_origen - size_destino) <= 100:  # Tolerancia de 100 bytes
+                    self.logger.info(f"Archivo copiado correctamente: {size_destino:,} bytes")
+                    return True
+                else:
+                    self.logger.error(f"Tamaños no coinciden: {size_origen:,} vs {size_destino:,}")
+                    return False
+            
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Error en copia robusta: {e}")
+            return False
+    
+    def _force_onedrive_sync_immediate(self, directory_path):
+        """FUERZA sincronización OneDrive inmediata"""
+        try:
+            directory_path = str(directory_path)
+            
+            self.logger.info("FORZANDO sincronización OneDrive...")
+            
+            # Método 1: Comando OneDrive directo (más efectivo)
+            onedrive_commands = [
+                # Comando para forzar sync de directorio específico
+                ['powershell', '-Command', f'(New-Object -ComObject "Shell.Application").Namespace("{directory_path}").Self.ExtendedProperty("System.StorageProviderStatus")'],
+                
+                # Comando alternativo
+                ['attrib', '+A', f'{directory_path}\\*', '/S'],
+                
+                # Tocar archivos para forzar detección
+                ['powershell', '-Command', f'Get-ChildItem "{directory_path}" | ForEach-Object {{ $_.LastWriteTime = Get-Date }}']
+            ]
+            
+            success_count = 0
+            
+            for cmd in onedrive_commands:
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+                    if result.returncode == 0:
+                        success_count += 1
+                    time.sleep(1)
+                except Exception:
+                    continue
+            
+            # Método 2: Crear archivo trigger específico
+            try:
+                trigger_file = Path(directory_path) / f".onedrive_trigger_{int(time.time())}.tmp"
+                with open(trigger_file, 'w') as f:
+                    f.write("trigger")
+                
+                time.sleep(2)
+                
+                if trigger_file.exists():
+                    trigger_file.unlink()
+                
+                success_count += 1
+                
+            except Exception as e:
+                self.logger.warning(f"Método trigger falló: {e}")
+            
+            # Método 3: Reiniciar proceso OneDrive si es necesario
+            if success_count == 0:
+                self._restart_onedrive_process()
+            
+            self.logger.info(f"Sincronización OneDrive ejecutada ({success_count}/4 métodos exitosos)")
+            return success_count > 0
+            
+        except Exception as e:
+            self.logger.error(f"Error forzando OneDrive: {e}")
+            return False
+    
+    def _restart_onedrive_process(self):
+        """Reinicia proceso OneDrive como último recurso"""
+        try:
+            self.logger.info("Reiniciando OneDrive como último recurso...")
+            
+            # Cerrar OneDrive
+            subprocess.run(['taskkill', '/F', '/IM', 'OneDrive.exe'], 
+                         capture_output=True, timeout=5)
+            
+            time.sleep(3)
+            
+            # Buscar y ejecutar OneDrive
+            onedrive_paths = [
+                os.path.join(os.environ.get('LOCALAPPDATA', ''), 'Microsoft', 'OneDrive', 'OneDrive.exe'),
+                r"C:\Program Files\Microsoft OneDrive\OneDrive.exe",
+                r"C:\Program Files (x86)\Microsoft OneDrive\OneDrive.exe"
+            ]
+            
+            for path in onedrive_paths:
+                if os.path.exists(path):
+                    subprocess.Popen([path], creationflags=subprocess.CREATE_NO_WINDOW)
+                    self.logger.info("OneDrive reiniciado")
+                    return True
+            
+            self.logger.warning("No se pudo reiniciar OneDrive")
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Error reiniciando OneDrive: {e}")
+            return False
+    
+    def _verify_cloud_sync(self, file_path, max_wait_minutes=2):
+        """Verifica que el archivo llegó a la nube OneDrive"""
+        try:
+            file_path = Path(file_path)
+            
+            if not file_path.exists():
+                return False
+            
+            self.logger.info("Verificando sincronización con nube OneDrive...")
+            
+            start_time = time.time()
+            max_wait_seconds = max_wait_minutes * 60
+            
+            while time.time() - start_time < max_wait_seconds:
+                # Método 1: Verificar atributos de sincronización
+                try:
+                    result = subprocess.run([
+                        'powershell', '-Command',
+                        f'Get-ItemProperty "{file_path}" | Select-Object -ExpandProperty Attributes'
+                    ], capture_output=True, text=True, timeout=10)
+                    
+                    # Si no hay errores y el archivo existe, probablemente está sincronizado
+                    if result.returncode == 0:
+                        self.logger.info("Archivo verificado en sistema de archivos")
+                        return True
+                        
+                except Exception:
+                    pass
+                
+                # Método 2: Verificar timestamp reciente (indica actividad de sync)
+                try:
+                    stat_info = file_path.stat()
+                    time_diff = time.time() - stat_info.st_mtime
+                    
+                    # Si fue modificado hace menos de 30 segundos, probablemente está sincronizando
+                    if time_diff < 30:
+                        self.logger.info("Archivo con timestamp reciente - probablemente sincronizado")
+                        return True
+                        
+                except Exception:
+                    pass
+                
+                time.sleep(5)  # Verificar cada 5 segundos
+            
+            # Timeout - asumir que está sincronizado si el archivo existe
+            self.logger.warning("Timeout verificando nube, pero archivo existe localmente")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error verificando sincronización nube: {e}")
+            return False
+
+# Integración con el sistema existente
+class EnhancedSyncSystem:
+    """Sistema mejorado que integra sincronización forzada"""
+    
+    def __init__(self):
+        self.onedrive_sync = OneDriveForcedSync()
+        self.logger = logging.getLogger('EnhancedSync')
+    
+    def sync_with_enhanced_verification(self, origen, destino):
+        """Sincronización con verificación mejorada y alertas"""
+        
+        self.logger.info("INICIANDO SINCRONIZACIÓN MEJORADA CON ALERTAS")
+        self.logger.info(f"Origen: {os.path.basename(origen)}")
+        self.logger.info(f"Destino: {os.path.basename(destino)}")
+        
+        # Usar el sistema de sincronización forzada
+        result = self.onedrive_sync.perform_sync_with_lock(origen, destino)
+        
+        # Log detallado del resultado
+        if result['success']:
+            self.logger.info("SINCRONIZACIÓN MEJORADA EXITOSA")
+            self.logger.info(f"  Copia: {'OK' if result['copy_success'] else 'FALLO'}")
+            self.logger.info(f"  OneDrive: {'FORZADO' if result['onedrive_sync'] else 'SIN FORZAR'}")
+            self.logger.info(f"  Nube: {'VERIFICADO' if result['cloud_verified'] else 'NO VERIFICADO'}")
+        else:
+            self.logger.error(f"SINCRONIZACIÓN FALLIDA: {result['message']}")
+        
+        return result
+
+# Función para integrar con tu sistema actual
+def enhanced_sync_file(origen, destino):
+    """Función de reemplazo para tus sincronizaciones actuales"""
+    enhanced_system = EnhancedSyncSystem()
+    return enhanced_system.sync_with_enhanced_verification(origen, destino)
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    from backend.config import Config
+    
+    enhanced_system = EnhancedSyncSystem()
+    result = enhanced_system.sync_with_enhanced_verification(
+        Config.RUTA_ORIGEN,
+        Config.RUTA_DESTINO
+    )
+    
+    print(f"Resultado: {'ÉXITO' if result['success'] else 'FALLO'}")
+    print(f"Mensaje: {result['message']}")

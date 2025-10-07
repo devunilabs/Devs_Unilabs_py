@@ -1,0 +1,6 @@
+ID_Personal,Fecha,ID_TipoLicencia,Descripcion,Estado,Condicion,Solicitado_Horas,Observaciones,ID_TipoEnfermedad,ID_TipoAccidenteTrabajo,ID_TipoParteLesionada,ID_TipoNaturalezaLesion,ID_TipoMaternidad,ID_TipoAplicacionLicencia
+42645688,10/03/2025,1,1,1,1,0,,6,,,,,1
+29571638,26/02/2025,1,1,1,1,0,,6,,,,,1
+45734194,16/03/2025,1,1,1,1,0,,6,,,,,1
+47546201,18/03/2025,1,1,1,1,0,,6,,,,,1
+47072096,24/03/2025,1,1,1,1,0,,6,,,,,1

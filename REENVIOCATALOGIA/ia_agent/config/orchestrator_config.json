@@ -1,0 +1,42 @@
+{
+    "orchestrator": {
+        "auto_start": true,
+        "monitor_interval": 10,
+        "log_analysis_enabled": true,
+        "email_notifications": false
+    },
+    "email": {
+        "provider": "disabled",
+        "smtp_server": "",
+        "smtp_port": 587,
+        "username": "",
+        "password": "",
+        "from_email": "",
+        "to_email": "",
+        "use_corporate_smtp": false
+    },
+
+ 
+    "langchain": {
+    "provider": "simulated",    
+    "openai_api_key": "",
+    "model": "business_ai_langchain_engine"
+
+    },
+    
+    
+    "backend_integration": {
+        "backend_script": "backend/watcher.py",
+        "log_file": "backend/log.txt",
+        "restart_on_failure": true,
+        "max_restart_attempts": 3
+    },
+    "notifications": {
+        "sync_success": false,
+        "sync_failure": false,
+        "system_start": false,
+        "error_threshold": 3,
+        "detailed_analysis": true,
+        "ai_decisions": true
+    }
+}

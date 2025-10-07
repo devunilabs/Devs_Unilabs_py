@@ -1,0 +1,8 @@
+Flask==2.3.2
+pandas>=1.5.3
+openpyxl==3.1.2
+Werkzeug==2.3.7
+python-dotenv==1.0.1         # Para manejar variables de entorno .env
+gunicorn==21.2.0             # Para despliegue en producción
+flask-cors==4.0.0            # Si necesitas habilitar CORS
+chardet==5.2.0               # Para detección automática de codificación

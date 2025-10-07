@@ -1,0 +1,57 @@
+{
+    "agent": {
+        "name": "REENVIOCATALOG_AI_AGENT",
+        "version": "1.0.0",
+        "mode": "production",
+        "debug_enabled": false
+    },
+    "monitoring": {
+        "realtime_enabled": true,
+        "file_watch_enabled": true,
+        "log_analysis_enabled": true,
+        "performance_tracking": true
+    },
+    "sync_behavior": {
+        "immediate_sync_on_change": true,
+        "debounce_seconds": 3,
+        "max_sync_attempts": 3,
+        "fallback_to_traditional": true
+    },
+    "ai_analysis": {
+        "enabled": false,
+        "provider": "none",
+        "fallback_mode": true,
+        "analyze_changes": false,
+        "analyze_errors": false,
+        "smart_triggers": false
+    },
+    "notifications": {
+        "console_output": true,
+        "log_file_output": true,
+        "email_notifications": false,
+        "webhook_notifications": false
+    },
+    "integration": {
+        "backend_integration": true,
+        "flask_api_integration": true,
+        "orchestrator_integration": false,
+        "standalone_mode": true
+    },
+    "performance": {
+        "max_queue_size": 100,
+        "worker_threads": 1,
+        "memory_limit_mb": 256,
+        "cleanup_interval_minutes": 60
+    },
+    "paths": {
+        "log_directory": "ia_agent/logs",
+        "config_directory": "ia_agent/config",
+        "temp_directory": "temp"
+    },
+    "error_handling": {
+        "retry_on_failure": true,
+        "max_retries": 3,
+        "backoff_strategy": "exponential",
+        "fail_safe_mode": true
+    }
+}
